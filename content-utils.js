@@ -74,8 +74,31 @@ function renderLink(url, label = "") {
     return '<span class="article-link-disabled">Tautan unduhan ini tidak ditampilkan.</span>';
   }
 
+  if (!label) {
+    const videoId = getYouTubeVideoId(url);
+    if (videoId) {
+      return `<a class="youtube-preview" href="${safeUrl}" target="_blank" rel="noopener noreferrer" aria-label="Tonton video YouTube">
+        <img src="https://i.ytimg.com/vi/${encodeURIComponent(videoId)}/hqdefault.jpg" alt="Thumbnail video YouTube" loading="lazy">
+        <span class="youtube-play" aria-hidden="true">▶</span>
+        <span class="youtube-caption"><strong>Tonton di YouTube</strong><span>YOUTUBE ↗</span></span>
+      </a>`;
+    }
+  }
+
   const linkText = label ? escapeHtml(label) : safeUrl;
   return `<a class="article-link" href="${safeUrl}" target="_blank" rel="noopener noreferrer">${linkText}<span aria-hidden="true"> ↗</span></a>`;
+}
+
+function getYouTubeVideoId(value) {
+  try {
+    const parsed = new URL(value);
+    if (parsed.hostname === "youtu.be") return parsed.pathname.slice(1).split("/")[0];
+    if (!["youtube.com", "www.youtube.com", "m.youtube.com", "youtube-nocookie.com", "www.youtube-nocookie.com"].includes(parsed.hostname)) return "";
+    if (parsed.pathname === "/watch") return parsed.searchParams.get("v") || "";
+    return parsed.pathname.match(/^\/(?:embed|shorts|live)\/([^/?]+)/)?.[1] || "";
+  } catch {
+    return "";
+  }
 }
 
 export function renderLinkedText(value) {

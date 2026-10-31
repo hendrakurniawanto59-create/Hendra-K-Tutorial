@@ -20,7 +20,7 @@ Statistik kunjungan memakai koleksi Firestore `pageViews`. Setelah memperbarui a
 
 Workflow GitHub Pages memeriksa RSS publik channel YouTube `@hendra.k` setiap 6 jam dan saat workflow dijalankan manual. Daftar video disimpan sebagai feed statis tanpa YouTube Data API key. Seluruh deskripsi video ditampilkan di halaman artikel, sedangkan kartu tutorial memakai ringkasan pendek. RSS publik tidak menyediakan durasi secara konsisten, sehingga filter video panjang/live tidak dapat dijamin tanpa YouTube Data API atau autentikasi tambahan.
 
-Setiap kartu, gambar, dan judul postingan membuka halaman artikel tersendiri. Form admin menyediakan editor isi artikel untuk format tebal/miring, subjudul, daftar, ukuran huruf, margin paragraf, spasi baris, serta tautan pada teks yang dipilih. Untuk menambahkan tautan, pilih kata atau teks lalu klik **Tautkan pilihan** dan masukkan URL. URL YouTube akan menampilkan thumbnail preview; klik preview untuk membuka videonya di YouTube.
+Setiap kartu, gambar, dan judul postingan membuka halaman artikel tersendiri. Form admin menyediakan editor isi artikel untuk format tebal/miring, subjudul, daftar, ukuran huruf, margin paragraf, spasi baris, serta tautan pada teks yang dipilih. URL YouTube yang ditulis langsung di isi postingan menampilkan thumbnail yang bisa diklik untuk membuka video di YouTube. Tautan YouTube yang disematkan pada teks lewat **Tautkan pilihan** tetap tampil sebagai teks yang bisa diklik.
 
 Jangan pernah membagikan password atau token login. Jangan mengganti Firestore Rules menjadi akses publik tanpa pembatasan tulis. Paket gratis Firebase memiliki kuota dan ketentuan penggunaan yang dapat berubah.
 

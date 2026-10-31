@@ -372,8 +372,10 @@ h1, h2, p { margin-top: 0; }
 .article-content-section li { padding-left: 4px; }
 .article-link-disabled { color: var(--muted); font-size: .92em; font-style: italic; }
 .youtube-preview { position: relative; display: block; max-width: 620px; margin: 20px 0; overflow: hidden; background: #20231f; color: white; }
+.article-content a.youtube-preview, .article-editor-canvas a.youtube-preview { display: block; padding: 0; border: 0; border-radius: 0; background: #20231f; color: white; }
 .youtube-preview img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; opacity: .88; transition: opacity .2s, transform .3s; }
 .youtube-preview:hover img { opacity: 1; transform: scale(1.015); }
+.article-content a.youtube-preview:hover, .article-editor-canvas a.youtube-preview:hover { background: #20231f; }
 .youtube-play { position: absolute; top: 50%; left: 50%; display: grid; width: 62px; height: 44px; place-items: center; transform: translate(-50%, -50%); border-radius: 10px; background: #e62117; color: white; font-size: 20px; padding-left: 3px; }
 .youtube-caption { position: absolute; right: 0; bottom: 0; left: 0; display: flex; align-items: end; justify-content: space-between; gap: 12px; padding: 28px 16px 13px; background: linear-gradient(transparent, rgb(0 0 0 / 72%)); }
 .youtube-caption span { color: #e5e5e5; font: 9px var(--mono); }
