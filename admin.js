@@ -13,6 +13,7 @@ const dashboardMessage = document.querySelector("#dashboard-message");
 const postForm = document.querySelector("#admin-view-create");
 const postList = document.querySelector("#admin-post-list");
 const articleEditor = document.querySelector("#post-body");
+const galleryItems = document.querySelector("#post-gallery-items");
 const linkForm = document.querySelector("#post-link-form");
 const linkUrl = document.querySelector("#post-link-url");
 const settingsForm = document.querySelector("#site-settings-form");
@@ -122,14 +123,14 @@ if (requireConfiguredFirebase()) {
 async function loadPosts() {
   const snapshot = await getDocs(collection(database, "posts"));
   posts = snapshot.docs.map((postDocument) => ({ id: postDocument.id, ...postDocument.data() }));
-  if (posts.length === 0) {
-    for (const post of defaultPosts) {
-      const { id, ...postData } = post;
-      await setDoc(doc(database, "posts", id), { ...postData, createdAt: Date.now() });
-      posts.push({ id, ...postData, createdAt: Date.now() });
-    }
-    showMessage(dashboardMessage, "Postingan awal berhasil dimasukkan ke database.");
+  const missingDefaults = defaultPosts.filter((post) => !posts.some((existingPost) => existingPost.id === post.id));
+  for (const post of missingDefaults) {
+    const { id, ...postData } = post;
+    const createdAt = Date.now();
+    await setDoc(doc(database, "posts", id), { ...postData, createdAt });
+    posts.push({ id, ...postData, createdAt });
   }
+  if (missingDefaults.length) showMessage(dashboardMessage, "Postingan default baru berhasil dimasukkan ke database.");
   renderPosts();
 }
 
@@ -344,6 +345,7 @@ function legacyContentToHtml(content) {
 function resetForm() {
   postForm.reset();
   articleEditor.innerHTML = "<p><br></p>";
+  galleryItems.replaceChildren();
   linkForm.hidden = true;
   linkUrl.value = "";
   linkUrl.disabled = true;
@@ -352,6 +354,55 @@ function resetForm() {
   document.querySelector("#post-save").textContent = "Tambah postingan";
   document.querySelector("#post-cancel").hidden = true;
 }
+
+function addGalleryItem(item = {}) {
+  const row = document.createElement("div");
+  row.className = "post-gallery-item";
+  row.innerHTML = `
+    <label>URL gambar preview (HTTPS)
+      <input type="url" data-gallery-image placeholder="https://... atau link berbagi Google Drive">
+    </label>
+    <label>Teks alternatif gambar
+      <input type="text" data-gallery-alt maxlength="140" placeholder="Contoh: Preview notifikasi tema neon">
+    </label>
+    <label>URL file Google Drive (HTTPS)
+      <input type="url" data-gallery-download placeholder="https://drive.google.com/file/d/...">
+    </label>
+    <button class="button button-light" type="button" data-gallery-remove>Hapus preview</button>
+  `;
+  row.querySelector("[data-gallery-image]").value = item.image || "";
+  row.querySelector("[data-gallery-alt]").value = item.alt || "";
+  row.querySelector("[data-gallery-download]").value = item.downloadUrl || "";
+  galleryItems.append(row);
+}
+
+function collectGalleryItems() {
+  const items = [];
+  for (const [index, row] of [...galleryItems.children].entries()) {
+    const imageInput = row.querySelector("[data-gallery-image]");
+    const altInput = row.querySelector("[data-gallery-alt]");
+    const downloadInput = row.querySelector("[data-gallery-download]");
+    const imageUrl = imageInput.value.trim();
+    const downloadUrl = downloadInput.value.trim();
+    const alt = altInput.value.trim();
+    if (!imageUrl && !downloadUrl && !alt) continue;
+    if (!imageUrl || !downloadUrl || !imageInput.checkValidity() || !downloadInput.checkValidity()) {
+      return { items: [], error: `Lengkapi URL gambar dan URL file Google Drive pada preview ke-${index + 1}.` };
+    }
+
+    const image = normalizeImageUrl(imageUrl);
+    if (!isHttpsUrl(image) || !isHttpsUrl(downloadUrl)) {
+      return { items: [], error: `URL gambar dan file preview ke-${index + 1} harus menggunakan HTTPS.` };
+    }
+    items.push({ image, alt: alt || `Preview notifikasi ${index + 1}`, downloadUrl });
+  }
+  return { items, error: "" };
+}
+
+document.querySelector("#post-gallery-add").addEventListener("click", () => addGalleryItem());
+galleryItems.addEventListener("click", (event) => {
+  if (event.target.closest("[data-gallery-remove]")) event.target.closest(".post-gallery-item").remove();
+});
 
 let savedEditorRange = null;
 
@@ -540,9 +591,14 @@ document.querySelector("#sign-out").addEventListener("click", () => signOut(auth
 document.querySelector("#post-cancel").addEventListener("click", resetForm);
 postForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  const gallery = collectGalleryItems();
+  if (gallery.error) {
+    showMessage(dashboardMessage, gallery.error, true);
+    return;
+  }
   const html = sanitizeRichHtml(articleEditor.innerHTML);
-  if (!articleEditor.innerText.trim()) {
-    showMessage(dashboardMessage, "Isi postingan tidak boleh kosong.", true);
+  if (!articleEditor.innerText.trim() && !gallery.items.length) {
+    showMessage(dashboardMessage, "Isi postingan atau tambahkan setidaknya satu preview.", true);
     articleEditor.focus();
     return;
   }
@@ -559,6 +615,7 @@ postForm.addEventListener("submit", async (event) => {
     description: document.querySelector("#post-description").value.trim(),
     image: document.querySelector("#post-image").value.trim(),
     alt: document.querySelector("#post-alt").value.trim(),
+    gallery: gallery.items,
     content: [{ heading: "Isi postingan", html }],
     createdAt: previous?.createdAt || Date.now()
   };
@@ -592,6 +649,8 @@ postList.addEventListener("click", async (event) => {
     document.querySelector("#post-description").value = post.description;
     document.querySelector("#post-image").value = post.image;
     document.querySelector("#post-alt").value = post.alt;
+    galleryItems.replaceChildren();
+    (Array.isArray(post.gallery) ? post.gallery : []).forEach(addGalleryItem);
     articleEditor.innerHTML = legacyContentToHtml(post.content) || "<p><br></p>";
     linkForm.hidden = true;
     document.querySelector("#post-save").textContent = "Simpan perubahan";

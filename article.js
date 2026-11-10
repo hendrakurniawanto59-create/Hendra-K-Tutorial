@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/fireba
 import { addDoc, collection, doc, getDoc, getFirestore } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
 import { defaultPosts } from "./posts-data.js";
-import { escapeHtml, renderLinkedText, sanitizeRichHtml } from "./content-utils.js?v=8";
+import { escapeHtml, normalizeImageUrl, renderLinkedText, sanitizeRichHtml } from "./content-utils.js?v=8";
 
 const loading = document.querySelector("#article-loading");
 const articleElement = document.querySelector("#article-detail");
@@ -92,8 +92,33 @@ function renderSection(section) {
   return `<section class="article-content-section">${heading}${paragraph}${list}</section>`;
 }
 
+function getSecureUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function renderGallery(gallery) {
+  if (!Array.isArray(gallery)) return "";
+  const previews = gallery.map((item) => {
+    if (!item || typeof item !== "object") return "";
+    const image = getSecureUrl(normalizeImageUrl(item.image || ""));
+    const downloadUrl = getSecureUrl(item.downloadUrl || "");
+    if (!image || !downloadUrl) return "";
+    return `<figure class="download-preview">
+      <img src="${escapeHtml(image)}" alt="${escapeHtml(item.alt || "Preview notifikasi")}" loading="lazy">
+      <figcaption><a class="download-preview-link" href="${escapeHtml(downloadUrl)}" target="_blank" rel="noopener noreferrer">Download di sini <span aria-hidden="true">↗</span></a></figcaption>
+    </figure>`;
+  }).join("");
+  return previews ? `<section class="article-gallery" aria-label="Preview dan file unduhan">${previews}</section>` : "";
+}
+
 function renderPost(post) {
   const content = Array.isArray(post.content) ? post.content.map(renderSection).join("") : "";
+  const gallery = renderGallery(post.gallery);
   const videoId = post.youtubeId || getYouTubeVideoId(post.youtubeUrl || "");
   const videoUrl = post.youtubeUrl || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "");
   const hasVideo = Boolean(videoId || post.youtubeUrl);
@@ -128,6 +153,7 @@ function renderPost(post) {
       <div class="article-byline"><span class="byline-mark">HK</span><span>HENDRA K.<br><small>CATATAN BELAJAR</small></span></div>
     </header>
     <div class="article-content">${content}</div>
+    ${gallery}
     ${video}
     <div class="article-end"><span>✳</span> TETAP BELAJAR, TETAP BERBAGI.</div>
   `;

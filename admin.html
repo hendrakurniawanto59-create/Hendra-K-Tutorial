@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=5">
-    <script type="module" src="admin.js?v=29"></script>
+    <link rel="stylesheet" href="styles.css?v=6">
+    <script type="module" src="admin.js?v=30"></script>
   </head>
   <body class="admin-page">
     <header class="site-header">
@@ -113,6 +113,16 @@
           <label>Ringkasan<textarea id="post-description" name="description" required rows="2" maxlength="220"></textarea></label>
           <label>URL gambar<input id="post-image" name="image" type="url" placeholder="https://..." required></label>
           <label>Teks alternatif gambar<input id="post-alt" name="alt" required maxlength="140"></label>
+          <section class="post-gallery-editor" aria-labelledby="post-gallery-title">
+            <div class="post-gallery-heading">
+              <div>
+                <h3 id="post-gallery-title">Preview notifikasi &amp; file unduhan</h3>
+                <p class="field-hint">Tambahkan gambar preview dan tautan Google Drive untuk setiap file. Pastikan akses Drive diatur ke siapa saja yang memiliki link.</p>
+              </div>
+              <button class="button button-light" id="post-gallery-add" type="button">Tambah preview</button>
+            </div>
+            <div id="post-gallery-items"></div>
+          </section>
           <div class="article-editor">
             <label for="post-body">Isi postingan</label>
             <div class="article-editor-toolbar" role="toolbar" aria-label="Pemformatan isi postingan">
