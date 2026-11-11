@@ -47,36 +47,43 @@ export const defaultPosts = [
     ],
     gallery: [
       {
+        name: "Valir — Mobile Legends",
         image: "https://drive.google.com/file/d/1_8hadJsgPrv_GaUX5XiTfnCg30ID7b3x/view?usp=drive_link",
         alt: "Preview custom Saweria Alert tema Valir Mobile Legends",
         downloadUrl: "https://drive.google.com/drive/folders/1W2BoiiHS2IK--Z6NYSqKfhL5NdO3sx2M?usp=drive_link"
       },
       {
+        name: "Raiden Shogun — Genshin Impact",
         image: "https://drive.google.com/file/d/1UYrlHzW14IQw03rdP1lwGDkpEbup_3hO/view?usp=drive_link",
         alt: "Preview custom Saweria Alert tema Raiden Shogun Genshin Impact",
         downloadUrl: "https://drive.google.com/drive/folders/1HIerg1PRk8d4bfNIGLUBXa_ijV18Ioow?usp=drive_link"
       },
       {
+        name: "Akai — Mobile Legends",
         image: "https://drive.google.com/file/d/1z31ZJTxLe53W6EmFgbh5GJ6HUIISeNbS/view?usp=drive_link",
         alt: "Preview custom Saweria Alert tema Akai Mobile Legends",
         downloadUrl: "https://drive.google.com/drive/folders/1FWAcicr0N_M-dqhCYvcREHZMS1NHGGew?usp=drive_link"
       },
       {
+        name: "Hanabi — Mobile Legends",
         image: "https://drive.google.com/file/d/1FdSKSU37IQ7j4J72w1DLIX7uEnDizQmn/view?usp=drive_link",
         alt: "Preview custom Saweria Alert tema Hanabi Mobile Legends",
         downloadUrl: "https://drive.google.com/drive/folders/109tAZTYBIG4T359SIpWgdr4sF5oYeBmv?usp=drive_link"
       },
       {
+        name: "Chang'e — Mobile Legends",
         image: "https://drive.google.com/file/d/15QhU6ebA3MV5IpyBiZH3vjLYGWd2-cP9/view?usp=drive_link",
         alt: "Preview custom Saweria Alert tema Chang'e Mobile Legends",
         downloadUrl: "https://drive.google.com/drive/folders/1OPQRtYcOFrRAxRz-Bee_Gu-7vxL__AIU?usp=drive_link"
       },
       {
+        name: "Kelly — Free Fire",
         image: "https://drive.google.com/file/d/1FWRQQbS-ON9rG50CvgsxO3S-Js-o6MEd/view?usp=drive_link",
         alt: "Preview custom Saweria Alert tema Kelly Free Fire",
         downloadUrl: "https://drive.google.com/drive/folders/1kCheuyVyo7_uoEyhpXmh3btAx9BA7ru6?usp=drive_link"
       },
       {
+        name: "Masha — Mobile Legends",
         image: "https://drive.google.com/file/d/1BctGXdz9V15LF17GeNdoZNI-YyLLeiTH/view?usp=drive_link",
         alt: "Preview custom Saweria Alert tema Masha Mobile Legends",
         downloadUrl: "https://drive.google.com/drive/folders/172dqnABFQ8OmFcwyVKVUUmGmsD7NAxUx?usp=drive_link"

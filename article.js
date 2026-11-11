@@ -109,6 +109,7 @@ function renderGallery(gallery) {
     const downloadUrl = getSecureUrl(item.downloadUrl || "");
     if (!image || !downloadUrl) return "";
     return `<figure class="download-preview">
+      <p class="download-preview-name">${escapeHtml(item.name || "Tema notifikasi")}</p>
       <img src="${escapeHtml(image)}" alt="${escapeHtml(item.alt || "Preview notifikasi")}" loading="lazy">
       <figcaption><a class="download-preview-link" href="${escapeHtml(downloadUrl)}" target="_blank" rel="noopener noreferrer">Download di sini <span aria-hidden="true">↗</span></a></figcaption>
     </figure>`;
