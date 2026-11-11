@@ -101,15 +101,16 @@ function getSecureUrl(value) {
   }
 }
 
-function renderGallery(gallery) {
+function renderGallery(gallery, fallbackNames = new Map()) {
   if (!Array.isArray(gallery)) return "";
   const previews = gallery.map((item) => {
     if (!item || typeof item !== "object") return "";
     const image = getSecureUrl(normalizeImageUrl(item.image || ""));
     const downloadUrl = getSecureUrl(item.downloadUrl || "");
     if (!image || !downloadUrl) return "";
+    const name = item.name || fallbackNames.get(normalizeImageUrl(item.image || "")) || "Tema notifikasi";
     return `<figure class="download-preview">
-      <p class="download-preview-name">${escapeHtml(item.name || "Tema notifikasi")}</p>
+      <p class="download-preview-name">${escapeHtml(name)}</p>
       <img src="${escapeHtml(image)}" alt="${escapeHtml(item.alt || "Preview notifikasi")}" loading="lazy">
       <figcaption><a class="download-preview-link" href="${escapeHtml(downloadUrl)}" target="_blank" rel="noopener noreferrer">Download di sini <span aria-hidden="true">↗</span></a></figcaption>
     </figure>`;
@@ -119,7 +120,9 @@ function renderGallery(gallery) {
 
 function renderPost(post) {
   const content = Array.isArray(post.content) ? post.content.map(renderSection).join("") : "";
-  const gallery = renderGallery(post.gallery);
+  const defaultGallery = defaultPosts.find((defaultPost) => defaultPost.id === post.id)?.gallery || [];
+  const fallbackNames = new Map(defaultGallery.map((item) => [normalizeImageUrl(item.image), item.name]));
+  const gallery = renderGallery(post.gallery, fallbackNames);
   const videoId = post.youtubeId || getYouTubeVideoId(post.youtubeUrl || "");
   const videoUrl = post.youtubeUrl || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "");
   const hasVideo = Boolean(videoId || post.youtubeUrl);
