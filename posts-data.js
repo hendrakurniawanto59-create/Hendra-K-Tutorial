@@ -89,5 +89,20 @@ export const defaultPosts = [
         downloadUrl: "https://drive.google.com/drive/folders/172dqnABFQ8OmFcwyVKVUUmGmsD7NAxUx?usp=drive_link"
       }
     ]
+  },
+  {
+    id: "need-for-speed-carbon-android",
+    title: "Main Game Need For Speed: Carbon di Android secara Native",
+    category: "Game",
+    date: "12 NOV 2026",
+    readTime: "3 MENIT",
+    description: "Catatan tentang menjalankan Need for Speed: Carbon di Android, perbedaan port native dan launcher, serta hal yang perlu diperhatikan soal kompatibilitas dan kepemilikan game.",
+    image: "https://dl.vimm.net/image.php?type=box&id=15733",
+    alt: "Sampul Need for Speed: Carbon",
+    content: [
+      { heading: "Native atau menggunakan launcher?", text: "Need for Speed: Carbon adalah game yang dirilis untuk platform lain, bukan port Android native resmi. Jadi, jika sebuah launcher bisa menjalankannya di ponsel, itu belum berarti gamenya berjalan secara native: launcher mungkin memakai lapisan kompatibilitas atau emulasi. Cara kerja dan hasilnya bergantung pada aplikasi yang digunakan." },
+      { heading: "Yang perlu diperhatikan", list: ["Pastikan sumber aplikasi tepercaya dan periksa izin yang diminta sebelum memasangnya. Hindari APK yang tidak jelas asal-usul atau keamanannya.", "Gunakan salinan game yang kamu miliki dan berhak gunakan. Jangan mengunduh atau membagikan salinan game dari sumber yang tidak berwenang.", "Performa dan kompatibilitas berbeda-beda tergantung perangkat, versi Android, dan launcher. Periksa dokumentasi resmi launcher untuk pengaturan yang sesuai."] },
+      { heading: "Kesimpulan", text: "Pengalaman bermain di Android bisa menarik, tetapi sebutan “native” sebaiknya dipakai hanya untuk port Android yang memang dibuat khusus untuk platform tersebut. Pastikan aplikasi dan game diperoleh secara sah, lalu sesuaikan ekspektasi performa dengan kemampuan perangkat." }
+    ]
   }
 ];
